@@ -57,6 +57,7 @@
         </transition>
         <transition name="login-fade">
             <UserAccount
+            v-if="userAccount"
             v-model:show="userAccount"
             :user="user"
             @tryChangeAccount="tryChangeAccount"

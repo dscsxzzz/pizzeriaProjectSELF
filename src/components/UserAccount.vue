@@ -1,28 +1,48 @@
 <template>
     <Wrapper v-if="show" @click.stop="renderForm">
-        <div @click.stop class="formContainer">
-            <h2>Account Info</h2>
-            <h2 v-show="!error">{{ message }}</h2>
-            <form @submit.prevent="tryChangeAccount">
-                <label for="username">Username:</label>
-                    <input type="text" name="username" :value="username" placeholder="Username"
-                    @change="username = $event.target.value">
-                    <label for="username">Name:</label>
-                    <input type="text" name="name" :value="name" @change="name = $event.target.value" placeholder="Name">
-                    <label for="username">Surname:</label>
-                    <input type="text" name="surname" :value="surname" @change="surname = $event.target.value" placeholder="Surname">
-                    <label for="username">Address:</label>
-                    <input type="text" name="address" :value="address" @change="address = $event.target.value" placeholder="Address">
-                    <label for="username">Phone Number:</label>
-                    <input type="text" name="phone" :value="phone" @change="Numberchek($event.target.value)" placeholder="Phone Number">
-                    <label for="username">E-mail:</label>
-                    <input type="text" name="email" :value="email" @change="email = $event.target.value" placeholder="E-mail">
-                    <p v-show="error">*{{ message }}</p>
-                <button type="submit" :class='error ? "disabled": ""'  :disabled="error">Save Changes</button>
-            </form>
-            <div class="accountBtns">
-                <button type="button" @click="this.$emit('tryChangePass')">Change Password</button>
-                <button type="submit"  @click="logOut">Log Out</button>
+        <div class="formContainer">
+            <div class="head">
+                <h2>User Account</h2>
+                <button @click.prevent="renderForm">X</button>
+            </div>
+            <div class="main">
+                <div class="orders">
+                    <div v-for="orderss in orders">
+                        <h2>order id {{orderss.transactionId}}</h2>
+                        <div v-for="order in orderss">
+                            <div>
+                                <p>{{ order.productName }}</p>
+                                <p>{{ order.productQuantity }}</p>
+                                <p v-if="order.productType === 'pizza'">{{ order.size }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="UserAccount">
+                    <h2>Account Info</h2>
+                    <h2 v-show="!error">{{ message }}</h2>
+                    <form @submit.prevent="tryChangeAccount">
+                        <label for="username">Username:</label>
+                            <input type="text" name="username" :value="username" placeholder="Username"
+                            @change="username = $event.target.value">
+                            <label for="username">Name:</label>
+                            <input type="text" name="name" :value="name" @change="name = $event.target.value" placeholder="Name">
+                            <label for="username">Surname:</label>
+                            <input type="text" name="surname" :value="surname" @change="surname = $event.target.value" placeholder="Surname">
+                            <label for="username">Address:</label>
+                            <input type="text" name="address" :value="address" @change="address = $event.target.value" placeholder="Address">
+                            <label for="username">Phone Number:</label>
+                            <input type="text" name="phone" :value="phone" @change="Numberchek($event.target.value)" placeholder="Phone Number">
+                            <label for="username">E-mail:</label>
+                            <input type="text" name="email" :value="email" @change="email = $event.target.value" placeholder="E-mail">
+                            <p v-show="error">*{{ message }}</p>
+                        <button type="submit" :class='error ? "disabled": ""'  :disabled="error">Save Changes</button>
+                    </form>
+                    <div class="accountBtns">
+                        <button type="button" @click="this.$emit('tryChangePass')">Change Password</button>
+                        <button type="submit"  @click="logOut">Log Out</button>
+                    </div>
+                </div>
             </div>
         </div>
     </Wrapper>
@@ -51,7 +71,9 @@ export default {
             name: this.user.name,
             surname: this.user.surname,
             address: this.user.address,
-            phone: this.user.phone
+            phone: this.user.phone,
+            orders: [],
+            orderItems: []
         }
     },
     methods: {
@@ -97,6 +119,7 @@ export default {
                     address: this.address,
                     phone: this.phone
                 }
+                console.log(user)
                 const jsonBody = JSON.stringify(user)
                 const response = await fetch(`https://localhost:7043/user/${user.id}`, {
                     method: 'PUT',
@@ -117,7 +140,17 @@ export default {
             } else {
                 return 0;
             }
+            },
+        async getOrders() {
+            const res = await fetch(`https://localhost:7043/Order/${this.user.id}/Orders`)
+            const orders = await res.json()
+            console.log(orders)
+            for (let i = 0; i < orders.length; i++) {
+                this.orders.push(orders[i])
             }
+        }
+        
+        
     }, watch: {
         user: {
             handler(newUser) {
@@ -131,6 +164,8 @@ export default {
             },
             immediate: true
         }
+    }, mounted() {
+        this.getOrders()
     }
 
 }
@@ -141,7 +176,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 25%;
+    width: 100%;
     max-height: max-content;
     padding: 2%;
     position: absolute;
@@ -149,6 +184,11 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.main{
+    display: flex;
+    flex-direction: row;
 }
 
 p{
@@ -192,7 +232,7 @@ input{
     border: none;
   }
   input::placeholder{
-    color: rgb(0, 0, 0);
+    color: rgb(0, 0, 0, 0.5);
     
 }
 
@@ -226,37 +266,31 @@ input{
 
 @media only screen and (max-width: 1200px) {
   .formContainer {
-    width: 40%;
   }
 }
 @media only screen and (max-width: 1200px) and (max-height: 601px)  {
   .formContainer {
-    width: 40%;
   }
 }
 
 @media only screen and (max-width: 900px) and (orientation: portrait)  {
   .formContainer {
-    width: 50%;
   }
 }
 
 @media only screen and (max-width: 550px) and (orientation: portrait)  {
   .formContainer {
-    width: 90%;
   }
 }
 
 @media only screen and (max-width: 281px) and (orientation: portrait) {
   .formContainer {
     
-    width: 100%;
   }
 }
 @media only screen and (max-width: 920px) and (orientation: landscape) {
   .formContainer {
     
-    width: 410px;
   }
 }
 </style>

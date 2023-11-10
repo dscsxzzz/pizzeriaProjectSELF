@@ -31,7 +31,7 @@
     </Wrapper>
 </template>
 <script>
-import OrderItem from './OrderItem.vue'
+import OrderItem from './OrderItem.vue';
 import Wrapper from './Wrapper.vue';
 
 export default {

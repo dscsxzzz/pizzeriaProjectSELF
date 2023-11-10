@@ -101,39 +101,43 @@ export default {
           return 0;
         }
         this.error = false;
-      }, Check() {
+      }, async Check() {
         if (this.order.pizzas.length !== 0 || this.order.desserts.length !== 0) {
           if (this.name !== "") {
             if (this.surname !== "") {
               if (this.address !== "") {
                 if (this.phone !== "") {
                   if (this.email !== "") {
-                    Email.send({
-                      Host: "smtp.elasticemail.com",
-                      Username: "krechuniak.a@gmail.com",
-                      Password: "B383CBC5AE75DFD0D580C8B628280B9A7228",
-                      To: this.email,
-                      From: "krechuniak.a@gmail.com",
-                      Subject: "Your Order ",
-                      Body: `This is your order, ${this.name} ${this.surname}, to address ${this,this.address}: ${this.order.pizzas.length !== 0 ? this.order.pizzas.map((element) => {
-                        return `${element.pizza.name}, ${element.size}, ${element.price * 40} UAH, ${element.amount}. position price: ${element.price * element.amount * 40} UAH \n`
-                      }) : ''}\n ${this.order.desserts.length !== 0 ? this.order.desserts.map((element) => {
-                        return `${element.dessert.name}, ${element.price * 40} UAH, ${element.amount}.position price: ${element.price * element.amount * 40
-                          } UAH \n`
-                      }) : ''}Total Price ${this.totalPrice * 40}UAH
-              \nThanks for Choosing us!
-              `
-                    }).then(
-                    this.animation(),
-                    this.submitted = true
-                  );
-                  setTimeout(() => {
-                    this.submitted = false;
-                  }, 3000)
-                  setTimeout(() => {
-                    this.$emit("update:show", false)
-                    this.$emit("cleanOrder")
-                  }, 3000)
+                    if (this.error !== true) {
+                      Email.send({
+                        Host: "smtp.elasticemail.com",
+                        Username: "krechuniak.a@gmail.com",
+                        Password: "B383CBC5AE75DFD0D580C8B628280B9A7228",
+                        To: this.email,
+                        From: "krechuniak.a@gmail.com",
+                        Subject: "Your Order ",
+                        Body: `This is your order, ${this.name} ${this.surname}, to address ${this, this.address}: ${this.order.pizzas.length !== 0 ? this.order.pizzas.map((element) => {
+                          return `${element.pizza.name}, ${element.size}, ${element.price * 40} UAH, ${element.amount}. position price: ${element.price * element.amount * 40} UAH \n`
+                        }) : ''}\n ${this.order.desserts.length !== 0 ? this.order.desserts.map((element) => {
+                          return `${element.dessert.name}, ${element.price * 40} UAH, ${element.amount}.position price: ${element.price * element.amount * 40
+                            } UAH \n`
+                        }) : ''}Total Price ${this.totalPrice * 40}UAH
+                \nThanks for Choosing us!
+                `
+                      }).then(
+                      await this.PostOrderToServer(),
+                      this.animation(),
+                      this.submitted = true
+                      );
+                      setTimeout(() => {
+                        this.submitted = false;
+                      }, 3000)
+                      setTimeout(() => {
+                        this.$emit("update:show", false)
+                        this.$emit("cleanOrder")
+                      }, 3000)
+                      
+                    }
                   } else {
                       this.error = true;
                       console.log("Problem in email")
@@ -180,6 +184,20 @@ export default {
           this.orderEmpty = false;
         }, 2000)
         }
+      }, async PostOrderToServer() {
+        
+      const jsonBody = JSON.stringify(this.order);
+      console.log(jsonBody)
+      const response = await fetch(`https://localhost:7043/Order/${this.user.id}`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application.json',
+          'Content-Type': 'application/json'
+        },
+        body: jsonBody,
+        cache: 'default'
+      })
+        return response;
       }
   }
   , watch: {

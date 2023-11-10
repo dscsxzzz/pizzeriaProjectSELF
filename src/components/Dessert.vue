@@ -48,7 +48,7 @@ export default {
                 animatedBox.style.display = "none";
                 animatedBox.classList.remove("animated");
             });
-            this.$emit('addToCartDessert', this.dessert, this.amount, this.price, 'dessert');
+            this.$emit('addToCartDessert', this.dessert, this.amount, this.price);
             this.amount = 1
         }
     }

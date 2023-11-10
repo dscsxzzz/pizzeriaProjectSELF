@@ -48,7 +48,7 @@ export default {
         },
         toggleCheese() {
             this.choice = false
-            this.price = this.pizza.sizeandcrust.mediumstuffedcrustcheesemax.price
+            this.price = this.pizza.mediumstuffedcrustcheesemax
             this.size = "cheese max"
         }, decrement() {
             if (this.amount - 1 !== 0) {
@@ -63,7 +63,7 @@ export default {
                 animatedBox.style.display = "none";
                 animatedBox.classList.remove("animated");
             });
-            this.$emit('addToCart', this.pizza, this.amount, this.price, this.size, 'pizza');
+            this.$emit('addToCart', this.pizza, this.amount, this.price, this.size);
             this.amount = 1
         }
     }
