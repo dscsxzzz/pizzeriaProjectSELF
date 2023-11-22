@@ -1,6 +1,5 @@
 <template>
-    <transition name="loading-fade">
-    <Wrapper v-if="show" @click.stop="renderOrder">
+    <Wrapper @click.stop="renderOrder">
             <div @click.stop class="order">
               <div class="head">
                 <h2>Input Details</h2>
@@ -35,12 +34,14 @@
                 <button @click="Check" :disabled="error" >Submit Order</button>
             </div>
         </Wrapper>
-    </transition>
+
 </template>
 
 <script >
 import Wrapper from './Wrapper.vue';
 import { Email } from "../smtp.js";
+import { store } from '../store/store';
+import baseUrl from '../config.json'
 export default {
     components: {
         Wrapper
@@ -49,32 +50,25 @@ export default {
     show: {
       type: Boolean,
       required: true
-    },
-    order: {
-      type: Object
-    }, totalPrice: {
-      type: Number
-    }, user: {
-      type: Object,
-      required: false
     }
   },
   data() {
-    return{
+    return {
+      store,
       submitted: false,
       error: false,
       orderEmpty: false,
-      email: this.user.email,
-      name: this.user.name,
-      surname: this.user.surname,
-      address: this.user.address,
+      email: store.user.email,
+      name: store.user.name,
+      surname: store.user.surname,
+      address: store.user.address,
       details: "",
-      phone: this.user.phone
+      phone: store.user.phone
       }
     }
     , methods: {
         renderOrder() {
-            this.$emit("update:show", false)
+            store.orderDetails = false
       }, animation() {
         const animatedBox = document.getElementById("orderSUBMITTED");
         animatedBox.style.display = "block";
@@ -102,7 +96,7 @@ export default {
         }
         this.error = false;
       }, async Check() {
-        if (this.order.pizzas.length !== 0 || this.order.desserts.length !== 0) {
+        if (store.order.pizzas.length !== 0 || this.store.desserts.length !== 0) {
           if (this.name !== "") {
             if (this.surname !== "") {
               if (this.address !== "") {
@@ -116,12 +110,12 @@ export default {
                         To: this.email,
                         From: "krechuniak.a@gmail.com",
                         Subject: "Your Order ",
-                        Body: `This is your order, ${this.name} ${this.surname}, to address ${this, this.address}: ${this.order.pizzas.length !== 0 ? this.order.pizzas.map((element) => {
+                        Body: `This is your order, ${this.name} ${this.surname}, to address ${this.address}: ${store.order.pizzas.length !== 0 ? store.order.pizzas.map((element) => {
                           return `${element.pizza.name}, ${element.size}, ${element.price * 40} UAH, ${element.amount}. position price: ${element.price * element.amount * 40} UAH \n`
-                        }) : ''}\n ${this.order.desserts.length !== 0 ? this.order.desserts.map((element) => {
+                        }) : ''}\n ${store.order.desserts.length !== 0 ? store.order.desserts.map((element) => {
                           return `${element.dessert.name}, ${element.price * 40} UAH, ${element.amount}.position price: ${element.price * element.amount * 40
                             } UAH \n`
-                        }) : ''}Total Price ${this.totalPrice * 40}UAH
+                        }) : ''}Total Price ${store.totalPrice * 40}UAH
                 \nThanks for Choosing us!
                 `
                       }).then(
@@ -133,9 +127,12 @@ export default {
                         this.submitted = false;
                       }, 3000)
                       setTimeout(() => {
-                        this.$emit("update:show", false)
+                        store.orderSideBar = false
+                      }, 2000)
+                      setTimeout(() => {
+                        store.orderDetails = false
                         this.$emit("cleanOrder")
-                      }, 3000)
+                      }, 1200)
                       
                     }
                   } else {
@@ -186,9 +183,9 @@ export default {
         }
       }, async PostOrderToServer() {
         
-      const jsonBody = JSON.stringify(this.order);
+      const jsonBody = JSON.stringify(store.order);
       console.log(jsonBody)
-      const response = await fetch(`https://localhost:7043/Order/${this.user.id}`, {
+      const response = await fetch(`${ baseUrl.baseUrl }/Order/${store.user.id}`, {
         method: 'POST',
         headers: {
           Accept: 'application.json',
@@ -201,7 +198,7 @@ export default {
       }
   }
   , watch: {
-    user: {
+    "store.user": {
       handler(newUser) {
         this.email = newUser ? newUser.email : '';
         this.name = newUser ? newUser.name : '';
