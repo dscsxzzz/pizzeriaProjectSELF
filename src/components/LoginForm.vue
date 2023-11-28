@@ -40,7 +40,7 @@
               <button type="submit">Log In</button>
           </form>
           <div class="btns">
-              <button @click="this.$emit('forgotPassword')" class="formDialogBtn"> Forgot password?</button>
+              <button @click="$router.push('/forgot-password')" class="formDialogBtn"> Forgot password?</button>
               <button @click="$router.push('/register')" class="formDialogBtn"> Create account</button>
           </div>
       </div>

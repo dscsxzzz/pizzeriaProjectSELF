@@ -16,6 +16,12 @@ const routes = [
         component: () => import ("../components/CreateAccount.vue"),
         name: "Register"
     },
+    ,
+    {
+        path: "/forgot-password",
+        component: () => import ("../components/ForgotPassword.vue"),
+        name: "ForgotPassword"
+    },
     {
         path: "/details",
         component: () => import ("../views/UserAccountView.vue"),
@@ -24,12 +30,18 @@ const routes = [
             {
                 path: "account",
                 component: () => import ("../components/UserAccount.vue"),
-                name: "UserAccount"
+                name: "UserAccount",
+                meta: {
+                    requiresAuth: true
+                }
             },
             {
                 path: "orders",
                 component: () => import ("../components/UserOrders.vue"),
-                name: "orders"
+                name: "UserOrders",
+                meta: {
+                    requiresAuth: true
+                }
             }
         ]
     },

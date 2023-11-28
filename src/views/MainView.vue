@@ -2,7 +2,7 @@
     <transition name="menu-transition" appear>
         <div class="mainContainer">
             <Banner/>
-            <div class="chooseMenu">
+            <div class="chooseMenu" v-if="originalPizzas.length !== 0">
                 <div :class="content === 'pizzas' ? 'choosen' : 'chooser'">
                     <img 
                         v-if="originalPizzas.length != 0" 
@@ -24,7 +24,7 @@
                     <h4>Desserts</h4>
                 </div>
             </div>
-            <PizzaFilter v-if="content === 'pizzas'" @filterPizzas="handleFilterPizzas"/>
+            <PizzaFilter v-if="content === 'pizzas' && originalPizzas.length !== 0" @filterPizzas="handleFilterPizzas"/>
 
             <Menu
                 v-if="originalPizzas.length !== 0"
@@ -35,10 +35,10 @@
                 :content="content"
             />
             <div v-else class="loader">
-                Loading <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                <h1>Loading</h1> <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
             </div>
-            <div v-if="pizzas.length === 0" style="height: 50vh">
-                <h1>Nothing To Display</h1>
+            <div v-if="pizzas.length === 0" style="height: 50vh;">
+                <h1 style="dispal: flex; margin-top: 20px;">Nothing To Display</h1>
             </div>
         </div>
     </transition>
@@ -179,6 +179,7 @@ export default {
 }
 
 .loader {
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -203,7 +204,7 @@ export default {
     width: 13px;
     height: 13px;
     border-radius: 50%;
-    background: #283618;
+    background: #e68028;
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 

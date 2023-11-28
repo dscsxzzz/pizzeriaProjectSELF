@@ -2,17 +2,17 @@
     <div class="order">
         <h2>Order#{{orders[0].id}}</h2>
         <h3>{{date}}</h3>
+        <div class="position">
+            <p style="color:#e68028">Name:</p>
+            <p>Size:</p>
+            <p>Q-ty:</p>
+            <p>Price:</p>
+        </div>
         <div class="details">
-            <div class="position">
-                <p>Name:</p>
-                <p>Size:</p>
-                <p>Q-ty:</p>
-                <p>Price:</p>
-            </div>
             <div class="positions">
                 <div v-for="order in orders" class="position">
-                    <p>{{ order.productName }} </p>
-                    <p>{{ order.size }}</p>
+                    <p style="color:#e68028">{{ order.productName }} </p>
+                    <p >{{ order.size }}</p>
                     <p>{{ order.productQuantity }}</p>
                     <p>{{order.price * 40}} UAH</p>
                 </div>
@@ -59,24 +59,32 @@ export default {
     height: 300px;
     margin: 10px;
     padding: 10px;
-    background-color: #b1b1b157;
-    box-shadow: 0 0 10px rgba(0, 0, 0);
+    background-repeat: none;
+    background-size: cover;
+    box-shadow: 0 0px 15px rgba(84, 83, 85, 0.295);
+
     border-radius: 5px;
 }
+
+
 
 .order h2{
     text-align: left;
     padding: 2px;
 }
-
+p{
+    font-weight: 600
+}
 .details{
+    z-index: 3;
+    height: 190px;
     display: grid;
-    grid-template-rows: 1fr 5fr 1fr;
+    grid-template-rows: 5fr 1fr;
 }
 .positions{
     display: flex;
     flex-direction: column;
-    max-height: 100px;
+    height: 100px;
     overflow-y: scroll;
 }
 .position{
@@ -89,6 +97,7 @@ export default {
 }
 .totalPrice{
     text-decoration: overline dashed black 1px;
+    color: #e68028;
 }
 
 

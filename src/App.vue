@@ -22,10 +22,11 @@ import MyOrder from './components/MyOrder.vue';
 import OrderDeatils from './components/OrderDeatils.vue';
 import NavBar from './components/NavBar.vue';
 import MyFooter from './components/MyFooter.vue';
+import ForgotPassword from './components/ForgotPassword.vue';
 import { store } from './store/store';
 export default {
     components: {
-        MyOrder, OrderDeatils, NavBar, MyFooter
+        MyOrder, OrderDeatils, NavBar, MyFooter, ForgotPassword
     },
     data() {
         return {

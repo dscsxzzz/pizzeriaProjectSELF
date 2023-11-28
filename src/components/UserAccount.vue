@@ -164,8 +164,8 @@ h2{
 form {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
     padding: 20px;
-
 }
 
 form button {

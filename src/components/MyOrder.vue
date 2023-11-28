@@ -109,6 +109,7 @@ a{
 a:hover{
     background-color: black;
     color: #fefae0;
+    cursor: pointer;
 }
 
 .orderManage{

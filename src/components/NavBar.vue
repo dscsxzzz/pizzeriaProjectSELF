@@ -97,7 +97,7 @@ h4{
     color: rgb(0, 0, 0);
     border-radius: 5px;
     background-color: rgb(255, 255, 255);
-    min-width: 100px;
+    min-width: 80px;
     max-width: max-content;
     font-weight: 600;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.438);
@@ -107,7 +107,7 @@ h4{
     align-self: center;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease-in;
 }
 
 h4:hover{

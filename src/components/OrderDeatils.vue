@@ -307,7 +307,7 @@ export default {
     }
     input{
         border: none;
-        background-color: #e68128ef;
+        background-color: #d6d4d3ef;
         color: black;
         margin-bottom:20px;
         padding: 10px;
@@ -321,12 +321,15 @@ export default {
         background-color: #e68128;
         box-shadow: 0 10px 40px rgba(0,0,0,0.03);
     padding: 10px;
-    color: black;
+    color: rgb(255, 255, 255);
     font-weight: 500;
     border: none;
+    transition: all 0.2s ease-in;
     }
     button:hover{
         cursor: pointer;
+      background-color: black;
+
     }
 
     @media only screen and (max-width: 1200px) {
