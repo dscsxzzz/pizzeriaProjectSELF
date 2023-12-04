@@ -62,7 +62,7 @@ export default {
             }
             const jsonBody1 = JSON.stringify(body);
             console.log(jsonBody1)
-            const response1 = await fetch(`${baseUrl.baseUrl}/login`, {
+            const response1 = await fetch(`${baseUrl.baseUrl}/Login`, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -83,7 +83,7 @@ export default {
                     password: this.newPassword
                 }
                 const jsonBody = JSON.stringify(user)
-                const response = await fetch(`${ baseUrl.baseUrl }/change-user-info/${user.id}`, {
+                const response = await fetch(`${ baseUrl.baseUrl }/Login/${user.id}`, {
                     method: 'PUT',
                     headers: {
                         Accept: 'application/json',

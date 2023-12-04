@@ -83,7 +83,7 @@ export default {
       }
       const jsonBody = JSON.stringify(body);
       console.log(jsonBody)
-      const response = await fetch(`${baseUrl.baseUrl}/auth/login`, {
+      const response = await fetch(`${baseUrl.baseUrl}/Login`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',

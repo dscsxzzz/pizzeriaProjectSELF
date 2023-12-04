@@ -162,7 +162,7 @@ export default {
                 };
                 const jsonBody = JSON.stringify(body);
                 console.log(jsonBody);
-                const response = await fetch(`${baseUrl.baseUrl}/auth/register`, {
+                const response = await fetch(`${baseUrl.baseUrl}/User`, {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',

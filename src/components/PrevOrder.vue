@@ -1,7 +1,7 @@
 <template>
     <div class="order">
-        <h2>Order#{{orders.id}}</h2>
-        <h3>{{date}}</h3>
+        <h2>Order#{{ orders[0].id }}</h2>
+        <h3>{{ date }}</h3>
         <div class="position">
             <p style="color:#e68028">Name:</p>
             <p>Size:</p>
@@ -10,22 +10,14 @@
         </div>
         <div class="details">
             <div class="positions">
-                <div v-for="order in orders.pizzas" class="position">
-                    <p style="color:#e68028">{{ order.pizza.name }} </p>
-                    <p >{{ order.size }}</p>
-                    <p>{{ order.amount }}</p>
-                    <p>{{order.price * 40}} UAH</p>
+                <div v-for="order in orders" class="position">
+                    <p style="color:#e68028">{{ order.productName }} </p>
+                    <p>{{ order.size }}</p>
+                    <p>{{ order.productQuantity }}</p>
+                    <p>{{ order.price * 40 }} UAH</p>
                 </div>
             </div>
-            <div class="positions">
-                <div v-for="order in orders.desserts" class="position">
-                    <p style="color:#e68028">{{ order.dessert.name }} </p>
-                    <p>normal</p>
-                    <p>{{ order.amount }}</p>
-                    <p>{{order.price * 40}} UAH</p>
-                </div>
-            </div>
-            <h2 class="totalPrice">Total price: {{totalPrice * 40}} UAH</h2>
+            <h2 class="totalPrice">Total price: {{ totalPrice * 40 }} UAH</h2>
         </div>
     </div>
 </template>
@@ -34,7 +26,7 @@
 export default {
     props: {
         orders: {
-            type: Object,
+            type: Array,
             required: true
         }
     }, data() {
@@ -43,17 +35,12 @@ export default {
             date: ""
         }
     }, methods: {
-        calculateTotalPrice(){
-            this.orders.pizzas.forEach(order => {
-                this.totalPrice += order.price * order.amount;
+        calculateTotalPrice() {
+            this.orders.forEach(order => {
+                this.totalPrice += order.price * order.productQuantity;
+                const transactionId = String(order.transactionId);
+                this.date = `${transactionId.slice(0, 4)}-${transactionId.slice(4, 6)}-${transactionId.slice(6, 8)} ${transactionId.slice(8, 10)}:${transactionId.slice(10, 12)}`
             })
-            this.orders.desserts.forEach(order => {
-                this.totalPrice += order.price * order.amount;
-            })  
-            const transactionDate = `${this.orders.date.slice(0,10)} 
-            ${this.orders.date.slice(11,16)}
-            `
-            this.date = transactionDate;          
         }
     }, mounted() {
         this.calculateTotalPrice()
@@ -64,7 +51,7 @@ export default {
 .order{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: start;
     width: 30%;
     height: max-content;
     margin: 10px;
